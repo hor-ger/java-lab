@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Oldal címe – Szoftverleltár</title>
+    <title>Kapcsolat – Szoftverleltár</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
@@ -10,32 +10,57 @@
 <body class="is-preload">
 <div id="page-wrapper">
 
-    <!-- Közös fejléc és menü -->
     <div th:replace="~{menu :: menu}"></div>
 
-    <!-- Oldal fő tartalma -->
     <section id="wrapper">
         <header>
             <div class="inner">
-                <h2>Oldal címe</h2>
-                <p>Rövid leírás az oldalról.</p>
+                <h2>Kapcsolat</h2>
+                <p>Küldjön üzenetet az oldal tulajdonosának – a beküldött üzenetek az adatbázisba kerülnek.</p>
             </div>
         </header>
 
         <div class="wrapper">
             <div class="inner">
-                <!-- IDE JÖN AZ OLDAL TARTALMA -->
-                <p>Tartalom feltöltés alatt...</p>
+                <div th:if="${siker}" style="color: #4caf50; margin-bottom: 1.5em;">
+                    Az üzenet sikeresen elküldve!
+                </div>
+
+                <form th:action="@{/kapcsolat}" th:object="${uzenet}" method="post">
+                    <div class="fields">
+                        <div class="field">
+                            <label for="nev">Név</label>
+                            <input type="text" th:field="*{nev}" id="nev" />
+                            <div th:if="${#fields.hasErrors('nev')}" th:errors="*{nev}" style="color: #ff5252; margin-top: 0.4em;"></div>
+                        </div>
+                        <div class="field">
+                            <label for="email">E-mail</label>
+                            <input type="email" th:field="*{email}" id="email" />
+                            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: #ff5252; margin-top: 0.4em;"></div>
+                        </div>
+                        <div class="field">
+                            <label for="targy">Tárgy</label>
+                            <input type="text" th:field="*{targy}" id="targy" />
+                            <div th:if="${#fields.hasErrors('targy')}" th:errors="*{targy}" style="color: #ff5252; margin-top: 0.4em;"></div>
+                        </div>
+                        <div class="field">
+                            <label for="szoveg">Üzenet</label>
+                            <textarea th:field="*{szoveg}" id="szoveg" rows="5"></textarea>
+                            <div th:if="${#fields.hasErrors('szoveg')}" th:errors="*{szoveg}" style="color: #ff5252; margin-top: 0.4em;"></div>
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Üzenet küldése" class="primary" /></li>
+                    </ul>
+                </form>
             </div>
         </div>
     </section>
 
-    <!-- Közös lábléc -->
     <div th:replace="~{footer :: footer}"></div>
 
 </div>
 
-<!-- Solid State JS -->
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
 <script th:src="@{/assets/js/browser.min.js}"></script>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Oldal címe – Szoftverleltár</title>
+    <title>Üzenetek – Szoftverleltár</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
@@ -10,32 +10,52 @@
 <body class="is-preload">
 <div id="page-wrapper">
 
-    <!-- Közös fejléc és menü -->
     <div th:replace="~{menu :: menu}"></div>
 
-    <!-- Oldal fő tartalma -->
     <section id="wrapper">
         <header>
             <div class="inner">
-                <h2>Oldal címe</h2>
-                <p>Rövid leírás az oldalról.</p>
+                <h2>Üzenetek</h2>
+                <p>A Kapcsolat űrlapon beküldött üzenetek fordított időrendben (legfrissebb elöl).</p>
             </div>
         </header>
 
         <div class="wrapper">
             <div class="inner">
-                <!-- IDE JÖN AZ OLDAL TARTALMA -->
-                <p>Tartalom feltöltés alatt...</p>
+                <div th:if="${#lists.isEmpty(uzenetek)}" style="margin-bottom: 1.5em;">
+                    Még nem érkezett üzenet. A <a th:href="@{/kapcsolat}">Kapcsolat</a> menüben lehet üzenetet küldeni.
+                </div>
+
+                <div class="table-wrapper" th:if="${!#lists.isEmpty(uzenetek)}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Küldés ideje</th>
+                            <th>Név</th>
+                            <th>E-mail</th>
+                            <th>Tárgy</th>
+                            <th>Üzenet</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="u : ${uzenetek}">
+                            <td th:text="${#temporals.format(u.kuldesIdeje, 'yyyy.MM.dd. HH:mm:ss')}"></td>
+                            <td th:text="${u.nev}"></td>
+                            <td th:text="${u.email}"></td>
+                            <td th:text="${u.targy}"></td>
+                            <td th:text="${u.szoveg}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Közös lábléc -->
     <div th:replace="~{footer :: footer}"></div>
 
 </div>
 
-<!-- Solid State JS -->
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
 <script th:src="@{/assets/js/browser.min.js}"></script>
