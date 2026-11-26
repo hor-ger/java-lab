@@ -1,41 +1,112 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Oldal címe – Szoftverleltár</title>
+    <title>Diagram – Szoftverleltár</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
     <noscript><link rel="stylesheet" th:href="@{/assets/css/noscript.css}" /></noscript>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="is-preload">
 <div id="page-wrapper">
 
-    <!-- Közös fejléc és menü -->
     <div th:replace="~{menu :: menu}"></div>
 
-    <!-- Oldal fő tartalma -->
     <section id="wrapper">
         <header>
             <div class="inner">
-                <h2>Oldal címe</h2>
-                <p>Rövid leírás az oldalról.</p>
+                <h2>Statisztikák és Diagramok</h2>
+                <p>Az adatbázis aktuális állapotának vizuális áttekintése Chart.js segítségével.</p>
             </div>
         </header>
 
         <div class="wrapper">
             <div class="inner">
-                <!-- IDE JÖN AZ OLDAL TARTALMA -->
-                <p>Tartalom feltöltés alatt...</p>
+                <div class="row gtr-uniform">
+
+                    <!-- 1. diagram: Szoftverek kategóriánként -->
+                    <div class="col-7 col-12-medium">
+                        <h3 class="major">Szoftverek kategóriánként</h3>
+                        <canvas id="kategoriaChart"></canvas>
+                    </div>
+
+                    <!-- 2. diagram: Gépek típusonként -->
+                    <div class="col-5 col-12-medium">
+                        <h3 class="major">Gépek típus szerint</h3>
+                        <canvas id="tipusChart"></canvas>
+                    </div>
+
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Közös lábléc -->
     <div th:replace="~{footer :: footer}"></div>
 
 </div>
 
-<!-- Solid State JS -->
+<!-- Adatok átadása Thymeleafből JavaScriptnek és diagramok kirajzolása -->
+<script th:inline="javascript">
+    const kategoriaCimkek = /*[[${kategoriaCimkek}]]*/ [];
+    const kategoriaErtekek = /*[[${kategoriaErtekek}]]*/ [];
+
+    const tipusCimkek = /*[[${tipusCimkek}]]*/ [];
+    const tipusErtekek = /*[[${tipusErtekek}]]*/ [];
+
+    // 1. Oszlopdiagram
+    new Chart(document.getElementById('kategoriaChart'), {
+        type: 'bar',
+        data: {
+            labels: kategoriaCimkek,
+            datasets: [{
+                label: 'Szoftverek száma (db)',
+                data: kategoriaErtekek,
+                backgroundColor: 'rgba(76, 132, 255, 0.7)',
+                borderColor: 'rgba(76, 132, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: '#ffffff' } }
+            },
+            scales: {
+                x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                y: { beginAtZero: true, ticks: { stepSize: 1, color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+            }
+        }
+    });
+
+    // 2. Kördiagram
+    new Chart(document.getElementById('tipusChart'), {
+        type: 'doughnut',
+        data: {
+            labels: tipusCimkek,
+            datasets: [{
+                label: 'Gépek száma',
+                data: tipusErtekek,
+                backgroundColor: [
+                    'rgba(76, 132, 255, 0.8)',
+                    'rgba(46, 204, 113, 0.8)',
+                    'rgba(241, 196, 15, 0.8)',
+                    'rgba(231, 76, 60, 0.8)'
+                ],
+                borderColor: '#2e3141',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: '#ffffff' } }
+            }
+        }
+    });
+</script>
+
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
 <script th:src="@{/assets/js/browser.min.js}"></script>
