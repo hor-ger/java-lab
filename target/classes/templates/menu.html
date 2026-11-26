@@ -1,16 +1,44 @@
 <!DOCTYPE html>
-<html   xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
-    <nav th:fragment="menu">
-        <a th:href="@{/}">Home</a>
-        <span sec:authorize="isAuthenticated()"> | <a th:href="@{/user}">User</a></span>
-        <span sec:authorize="hasRole('ADMIN')"> | <a th:href="@{/admin}">Admin</a></span>
-        <span sec:authorize="isAnonymous()"> | <a th:href="@{/register}">Register</a>  | <a th:href="@{/login}">Login</a></span>
-        <span sec:authorize="isAuthenticated()"> |
-            <form th:action="@{/logout}" method="post" style="display: inline">
-                <button type="submit">Logout</button>
-            </form>
-        </span>
+
+<div th:fragment="menu">
+    <!-- Fejléc -->
+    <header id="header">
+        <h1><a th:href="@{/}">Szoftverleltár</a></h1>
+        <nav>
+            <a href="#menu">Menü</a>
+        </nav>
+    </header>
+
+    <!-- Lenyíló oldalsó menü -->
+    <nav id="menu">
+        <div class="inner">
+            <h2>Menü</h2>
+            <ul class="links">
+                <li><a th:href="@{/}">Főoldal</a></li>
+                <li><a th:href="@{/adatbazis}">Adatbázis</a></li>
+                <li><a th:href="@{/kapcsolat}">Kapcsolat</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/uzenetek}">Üzenetek</a></li>
+                <li><a th:href="@{/diagram}">Diagram</a></li>
+                <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/crud}">CRUD</a></li>
+                <li><a th:href="@{/rest}">REST</a></li>
+
+                <!-- Csak látogatóknak -->
+                <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Login</a></li>
+                <li sec:authorize="isAnonymous()"><a th:href="@{/register}">Regisztráció</a></li>
+
+                <!-- Csak bejelentkezetteknek -->
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" style="margin: 0;">
+                        <button type="submit" class="button small fit">Kijelentkezés (<span sec:authentication="name"></span>)</button>
+                    </form>
+                </li>
+            </ul>
+            <a href="#" class="close">Close</a>
+        </div>
     </nav>
+</div>
+
 </body>
 </html>

@@ -1,18 +1,63 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Registration</title>
+    <title>Regisztráció – Szoftverleltár</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <noscript><link rel="stylesheet" th:href="@{/assets/css/noscript.css}" /></noscript>
 </head>
-<body>
+<body class="is-preload">
+<div id="page-wrapper">
+
+    <!-- Közös menü -->
     <div th:replace="~{menu :: menu}"></div>
-    <hr>
-    <h1>Registration</h1>
-    <p th:if="${error}" th:text="${error}" style="color: red"></p>
-    <form th:action="@{/register}" method="post">
-        <label>Username:</label><input type="text" name="username" required><br>
-        <label>Password:</label><input type="password" name="password" required><br>
-        <button type="submit">Register</button>
-    </form>
+
+    <!-- Oldal tartalma -->
+    <section id="wrapper">
+        <header>
+            <div class="inner">
+                <h2>Regisztráció</h2>
+                <p>Hozz létre egy új felhasználói fiókot az Üzenetek menü eléréséhez.</p>
+            </div>
+        </header>
+
+        <div class="wrapper">
+            <div class="inner">
+                <!-- Hibaüzenet, ha már foglalt a felhasználónév -->
+                <div th:if="${error}" th:text="${error}" style="color: #ff5252; margin-bottom: 1em;"></div>
+
+                <form th:action="@{/register}" method="post">
+                    <div class="fields">
+                        <div class="field">
+                            <label for="username">Felhasználónév</label>
+                            <input type="text" name="username" id="username" required />
+                        </div>
+                        <div class="field">
+                            <label for="password">Jelszó</label>
+                            <input type="password" name="password" id="password" required />
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Regisztráció" class="primary" /></li>
+                        <li><a th:href="@{/login}" class="button">Már van fiókom</a></li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Közös lábléc -->
+    <div th:replace="~{footer :: footer}"></div>
+
+</div>
+
+<!-- Solid State JS -->
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
+<script th:src="@{/assets/js/browser.min.js}"></script>
+<script th:src="@{/assets/js/breakpoints.min.js}"></script>
+<script th:src="@{/assets/js/util.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
 </body>
 </html>

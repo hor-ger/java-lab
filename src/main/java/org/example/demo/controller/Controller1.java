@@ -20,6 +20,36 @@ public class Controller1 {
         return "home";
     }
 
+    @GetMapping("/adatbazis")
+    public String adatbazis() {
+        return "adatbazis";
+    }
+
+    @GetMapping("/kapcsolat")
+    public String kapcsolat() {
+        return "kapcsolat";
+    }
+
+    @GetMapping("/uzenetek")
+    public String uzenetek() {
+        return "uzenetek";
+    }
+
+    @GetMapping("/diagram")
+    public String diagram() {
+        return "diagram";
+    }
+
+    @GetMapping("/crud")
+    public String crud() {
+        return "crud";
+    }
+
+    @GetMapping("/rest")
+    public String rest() {
+        return "rest";
+    }
+
     @GetMapping("/user")
     public String userPage() {
         return "user";

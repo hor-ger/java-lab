@@ -1,4 +1,5 @@
 package org.example.demo.config;
+
 import org.example.demo.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,22 +9,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 @Configuration
 public class WebSecurityConfig {
+
     private final CustomUserDetailsService userDetailsService;
+
     public WebSecurityConfig(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
+
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (request, response, authentication) -> {
@@ -31,24 +38,37 @@ public class WebSecurityConfig {
                     .getAuthorities()
                     .stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+            String contextPath = request.getContextPath();
             if (isAdmin) {
-                response.sendRedirect("/admin");
+                response.sendRedirect(contextPath + "/crud");
             } else {
-                response.sendRedirect("/user");
+                response.sendRedirect(contextPath + "/uzenetek");
             }
         };
     }
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
-                http
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
                 .authenticationProvider(authenticationProvider())
+                // A REST API végpontokra kikapcsoljuk a CSRF-et, hogy cURL/Postman POST/PUT/DELETE működjön
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**")
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/register", "/login", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .anyRequest()
-                        .authenticated()
+                        // Nyilvános oldalak és statikus fájlok (látogatók is elérik)
+                        .requestMatchers(
+                                "/", "/adatbazis", "/kapcsolat", "/diagram", "/rest",
+                                "/api/**",
+                                "/register", "/login", "/error", "/favicon.ico",
+                                "/assets/**", "/images/**", "/css/**", "/js/**"
+                        ).permitAll()
+                        // Csak bejelentkezett felhasználók (USER és ADMIN)
+                        .requestMatchers("/uzenetek", "/user").hasAnyRole("USER", "ADMIN")
+                        // Csak ADMIN
+                        .requestMatchers("/crud/**", "/admin").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -60,18 +80,25 @@ public class WebSecurityConfig {
                         .permitAll()
                 )
                 .exceptionHandling(exception -> exception
+                        // Ha nem bejelentkezett felhasználó próbálja megnyitni az Üzenetek oldalt -> /login
                         .defaultAuthenticationEntryPointFor(
                                 (request, response, authException) ->
-                                        response.sendRedirect("/login"), request -> request.getRequestURI().equals("/user")
+                                        response.sendRedirect(request.getContextPath() + "/login"),
+                                request -> request.getRequestURI().endsWith("/uzenetek")
                         )
+                        // Ha nem bejelentkezett felhasználó próbálja megnyitni a CRUD oldalt -> főoldal
                         .defaultAuthenticationEntryPointFor(
                                 (request, response, authException) ->
-                                        response.sendRedirect("/"),request -> request.getRequestURI().equals("/admin")
+                                        response.sendRedirect(request.getContextPath() + "/"),
+                                request -> request.getRequestURI().contains("/crud")
                         )
+                        // Ha bejelentkezett USER próbál belépni ADMIN oldalra -> főoldal
                         .accessDeniedHandler(
-                                (request, response, accessDeniedException) -> response.sendRedirect("/")
+                                (request, response, accessDeniedException) ->
+                                        response.sendRedirect(request.getContextPath() + "/")
                         )
                 );
+
         return http.build();
     }
 }

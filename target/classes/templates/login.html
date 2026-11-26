@@ -1,19 +1,62 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
+  <title>Bejelentkezés – Szoftverleltár</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+  <noscript><link rel="stylesheet" th:href="@{/assets/css/noscript.css}" /></noscript>
 </head>
-<body>
+<body class="is-preload">
+<div id="page-wrapper">
+
+  <!-- Közös menü -->
   <div th:replace="~{menu :: menu}"></div>
-  <hr>
-  <h1>Login</h1>
-  <div th:if="${param.registered}" style="color: green;">Successful registration! You can log in.</div>
-  <div th:if="${param.error}" style="color: red;">Incorrect username or password!</div>
-  <form th:action="@{/login}" method="post">
-    <label>Username:</label><input type="text" name="username"><br>
-    <label>Password:</label><input type="password" name="password"><br>
-    <button type="submit">Login</button>
-  </form>
+
+  <!-- Oldal tartalma -->
+  <section id="wrapper">
+    <header>
+      <div class="inner">
+        <h2>Bejelentkezés</h2>
+        <p>Lépj be a fiókodba az Üzenetek és Admin funkciók eléréséhez.</p>
+      </div>
+    </header>
+
+    <div class="wrapper">
+      <div class="inner">
+        <div th:if="${param.registered}" style="color: #4caf50; margin-bottom: 1em;">Sikeres regisztráció! Most már bejelentkezhetsz.</div>
+        <div th:if="${param.error}" style="color: #ff5252; margin-bottom: 1em;">Hibás felhasználónév vagy jelszó!</div>
+
+        <form th:action="@{/login}" method="post">
+          <div class="fields">
+            <div class="field">
+              <label for="username">Felhasználónév</label>
+              <input type="text" name="username" id="username" required />
+            </div>
+            <div class="field">
+              <label for="password">Jelszó</label>
+              <input type="password" name="password" id="password" required />
+            </div>
+          </div>
+          <ul class="actions">
+            <li><input type="submit" value="Bejelentkezés" class="primary" /></li>
+          </ul>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Közös lábléc -->
+  <div th:replace="~{footer :: footer}"></div>
+
+</div>
+
+<!-- Solid State JS fájlok (kötelező a menühöz!) -->
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
+<script th:src="@{/assets/js/browser.min.js}"></script>
+<script th:src="@{/assets/js/breakpoints.min.js}"></script>
+<script th:src="@{/assets/js/util.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
 </body>
 </html>

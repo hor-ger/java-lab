@@ -1,35 +1,82 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Főoldal – Szoftverleltár</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <noscript><link rel="stylesheet" th:href="@{/assets/css/noscript.css}" /></noscript>
 </head>
-<body>
-    <div th:replace="~{menu :: menu}"></div>
-    <hr>
-    <h1>Home page</h1>
-    <div sec:authorize="isAuthenticated()">
-        <p>Logged in user:<strong sec:authentication="name"></strong></p>
-    </div>
+<body class="is-preload">
+<div id="page-wrapper">
 
-    <h2>Gépek listája (teszt)</h2>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Hely</th>
-            <th>Típus</th>
-            <th>IP cím</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="gep : ${gepek}">
-            <td th:text="${gep.id}"></td>
-            <td th:text="${gep.hely}"></td>
-            <td th:text="${gep.tipus}"></td>
-            <td th:text="${gep.ipcim}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <!-- Közös menü -->
+    <div th:replace="~{menu :: menu}"></div>
+
+    <!-- Banner -->
+    <section id="banner">
+        <div class="inner">
+            <div class="logo"><span class="icon solid fa-laptop-code"></span></div>
+            <h2>Intézményi Szoftverleltár</h2>
+            <p>Géptermek, munkaállomások és telepített szoftverek központi nyilvántartó rendszere</p>
+            <p sec:authorize="isAuthenticated()" style="color: #8ab4f8;">
+                Bejelentkezve: <strong sec:authentication="name"></strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- Tartalom szekciók -->
+    <section id="wrapper">
+
+        <!-- 1. szekció: Adatbázis -->
+        <section id="one" class="wrapper spotlight style1">
+            <div class="inner">
+                <a th:href="@{/adatbazis}" class="image"><img th:src="@{/images/pic01.jpg}" alt="Gépterem" /></a>
+                <div class="content">
+                    <h2 class="major">Hardver- és szoftvernyilvántartás</h2>
+                    <p>Kövesd nyomon egy helyen az összes asztali számítógépet, notebookot, IP-címet és a rájuk telepített alkalmazások pontos verziószámát és telepítési dátumát.</p>
+                    <a th:href="@{/adatbazis}" class="special">Adatbázis megtekintése</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. szekció: Diagram -->
+        <section id="two" class="wrapper alt spotlight style2">
+            <div class="inner">
+                <a th:href="@{/diagram}" class="image"><img th:src="@{/images/pic02.jpg}" alt="Statisztika" /></a>
+                <div class="content">
+                    <h2 class="major">Vizuális statisztikák</h2>
+                    <p>Interaktív Chart.js diagramok segítségével átláthatod a szoftverkategóriák megoszlását, a leggyakrabban telepített programokat és a géptípusok arányát.</p>
+                    <a th:href="@{/diagram}" class="special">Diagramok megnyitása</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. szekció: Admin / CRUD & REST -->
+        <section id="three" class="wrapper spotlight style3">
+            <div class="inner">
+                <a th:href="@{/rest}" class="image"><img th:src="@{/images/pic03.jpg}" alt="API és kezelés" /></a>
+                <div class="content">
+                    <h2 class="major">Adminisztráció és RESTful API</h2>
+                    <p>Adminisztrátori jogosultsággal új gépek vehetők fel, módosíthatók és törölhetők a CRUD felületen, a rendszer adatai pedig szabványos REST API-n keresztül is elérhetők.</p>
+                    <a th:href="@{/kapcsolat}" class="special">Kapcsolatfelvétel</a>
+                </div>
+            </div>
+        </section>
+
+    </section>
+
+    <!-- Közös lábléc -->
+    <div th:replace="~{footer :: footer}"></div>
+
+</div>
+
+<!-- Solid State JS -->
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
+<script th:src="@{/assets/js/browser.min.js}"></script>
+<script th:src="@{/assets/js/breakpoints.min.js}"></script>
+<script th:src="@{/assets/js/util.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
 </body>
 </html>

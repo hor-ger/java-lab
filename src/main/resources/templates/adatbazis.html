@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Oldal címe – Szoftverleltár</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <noscript><link rel="stylesheet" th:href="@{/assets/css/noscript.css}" /></noscript>
+</head>
+<body class="is-preload">
+<div id="page-wrapper">
+
+    <!-- Közös fejléc és menü -->
+    <div th:replace="~{menu :: menu}"></div>
+
+    <!-- Oldal fő tartalma -->
+    <section id="wrapper">
+        <header>
+            <div class="inner">
+                <h2>Oldal címe</h2>
+                <p>Rövid leírás az oldalról.</p>
+            </div>
+        </header>
+
+        <div class="wrapper">
+            <div class="inner">
+                <!-- IDE JÖN AZ OLDAL TARTALMA -->
+                <p>Tartalom feltöltés alatt...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Közös lábléc -->
+    <div th:replace="~{footer :: footer}"></div>
+
+</div>
+
+<!-- Solid State JS -->
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
+<script th:src="@{/assets/js/browser.min.js}"></script>
+<script th:src="@{/assets/js/breakpoints.min.js}"></script>
+<script th:src="@{/assets/js/util.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
+</body>
+</html>
