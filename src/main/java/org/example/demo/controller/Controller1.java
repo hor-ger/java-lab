@@ -1,12 +1,20 @@
 package org.example.demo.controller;
 
+import jakarta.validation.Valid;
+import org.example.demo.entity.Uzenet;
 import org.example.demo.repository.GepRepository;
 import org.example.demo.repository.SzoftverRepository;
 import org.example.demo.repository.TelepitesRepository;
+import org.example.demo.repository.UzenetRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,13 +25,16 @@ public class Controller1 {
     private final GepRepository gepRepository;
     private final SzoftverRepository szoftverRepository;
     private final TelepitesRepository telepitesRepository;
+    private final UzenetRepository uzenetRepository;
 
     public Controller1(GepRepository gepRepository,
                        SzoftverRepository szoftverRepository,
-                       TelepitesRepository telepitesRepository) {
+                       TelepitesRepository telepitesRepository,
+                       UzenetRepository uzenetRepository) {
         this.gepRepository = gepRepository;
         this.szoftverRepository = szoftverRepository;
         this.telepitesRepository = telepitesRepository;
+        this.uzenetRepository = uzenetRepository;
     }
 
     @GetMapping("/")
@@ -46,18 +57,33 @@ public class Controller1 {
     }
 
     @GetMapping("/kapcsolat")
-    public String kapcsolat() {
+    public String kapcsolat(Model model) {
+        if (!model.containsAttribute("uzenet")) {
+            model.addAttribute("uzenet", new Uzenet());
+        }
         return "kapcsolat";
     }
 
+    @PostMapping("/kapcsolat")
+    public String kapcsolatKuldes(@Valid @ModelAttribute("uzenet") Uzenet uzenet,
+                                  BindingResult bindingResult,
+                                  RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "kapcsolat";
+        }
+        uzenetRepository.save(uzenet);
+        redirectAttributes.addFlashAttribute("siker", true);
+        return "redirect:/kapcsolat";
+    }
+
     @GetMapping("/uzenetek")
-    public String uzenetek() {
+    public String uzenetek(Model model) {
+        model.addAttribute("uzenetek", uzenetRepository.findAllByOrderByKuldesIdejeDesc());
         return "uzenetek";
     }
 
     @GetMapping("/diagram")
     public String diagram(Model model) {
-        // 1. Szoftverek csoportosítása kategória szerint
         Map<String, Long> kategoriaStat = szoftverRepository.findAll().stream()
                 .collect(Collectors.groupingBy(
                         sz -> sz.getKategoria() != null ? sz.getKategoria() : "Egyéb",
@@ -67,7 +93,6 @@ public class Controller1 {
         model.addAttribute("kategoriaCimkek", new ArrayList<>(kategoriaStat.keySet()));
         model.addAttribute("kategoriaErtekek", new ArrayList<>(kategoriaStat.values()));
 
-        // 2. Gépek csoportosítása típus szerint
         Map<String, Long> gepTipusStat = gepRepository.findAll().stream()
                 .collect(Collectors.groupingBy(
                         g -> g.getTipus() != null ? g.getTipus() : "Ismeretlen",
