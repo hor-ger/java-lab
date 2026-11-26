@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>CRUD kezelés – Szoftverleltár</title>
+    <title>Adatbázis – Szoftverleltár</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
@@ -15,8 +15,8 @@
     <section id="wrapper">
         <header>
             <div class="inner">
-                <h2>Szoftver adatbázis</h2>
-
+                <h2>Adatbázis</h2>
+                <p>A nyilvántartásban szereplő gépek, szoftverek és telepítések adatai.</p>
             </div>
         </header>
 
@@ -24,7 +24,7 @@
             <div class="inner">
 
                 <!-- Lenyíló táblaválasztó -->
-                <form th:action="@{/crud}" method="get" style="margin-bottom: 2em;">
+                <form th:action="@{/adatbazis}" method="get" style="margin-bottom: 2em;">
                     <div class="row gtr-uniform">
                         <div class="col-6 col-12-xsmall">
                             <label for="tabla">Válassz táblát:</label>
@@ -34,7 +34,6 @@
                                 <option value="telepites" th:selected="${tabla == 'telepites'}">Telepítések (telepites)</option>
                             </select>
                         </div>
-
                     </div>
                 </form>
 
@@ -47,7 +46,6 @@
                             <th>Hely</th>
                             <th>Típus</th>
                             <th>IP cím</th>
-                            <th>Műveletek</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -56,7 +54,6 @@
                             <td th:text="${g.hely}"></td>
                             <td th:text="${g.tipus}"></td>
                             <td th:text="${g.ipcim}"></td>
-
                         </tr>
                         </tbody>
                     </table>
@@ -70,7 +67,6 @@
                             <th>ID</th>
                             <th>Név</th>
                             <th>Kategória</th>
-                            <th>Műveletek</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -78,7 +74,6 @@
                             <td th:text="${sz.id}"></td>
                             <td th:text="${sz.nev}"></td>
                             <td th:text="${sz.kategoria}"></td>
-
                         </tr>
                         </tbody>
                     </table>
@@ -94,7 +89,6 @@
                             <th>Szoftver</th>
                             <th>Verzió</th>
                             <th>Dátum</th>
-                            <th>Műveletek</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -104,7 +98,6 @@
                             <td th:text="${t.szoftver != null ? t.szoftver.nev : t.szoftverid}"></td>
                             <td th:text="${t.verzio != null ? t.verzio : '-'}"></td>
                             <td th:text="${t.datum != null ? t.datum : '-'}"></td>
-
                         </tr>
                         </tbody>
                     </table>
