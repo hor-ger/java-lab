@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Oldal címe – Szoftverleltár</title>
+    <title>CRUD kezelés – Szoftverleltár</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
@@ -10,32 +10,130 @@
 <body class="is-preload">
 <div id="page-wrapper">
 
-    <!-- Közös fejléc és menü -->
     <div th:replace="~{menu :: menu}"></div>
 
-    <!-- Oldal fő tartalma -->
     <section id="wrapper">
         <header>
             <div class="inner">
-                <h2>Oldal címe</h2>
-                <p>Rövid leírás az oldalról.</p>
+                <h2>CRUD Adminisztráció</h2>
+                <p>Gépek, szoftverek és telepítések kezelése (csak Admin jogosultsággal).</p>
             </div>
         </header>
 
         <div class="wrapper">
             <div class="inner">
-                <!-- IDE JÖN AZ OLDAL TARTALMA -->
-                <p>Tartalom feltöltés alatt...</p>
+
+                <!-- Lenyíló táblaválasztó -->
+                <form th:action="@{/crud}" method="get" style="margin-bottom: 2em;">
+                    <div class="row gtr-uniform">
+                        <div class="col-6 col-12-xsmall">
+                            <label for="tabla">Válassz táblát:</label>
+                            <select name="tabla" id="tabla" onchange="this.form.submit()">
+                                <option value="gep" th:selected="${tabla == 'gep'}">Gépek (gep)</option>
+                                <option value="szoftver" th:selected="${tabla == 'szoftver'}">Szoftverek (szoftver)</option>
+                                <option value="telepites" th:selected="${tabla == 'telepites'}">Telepítések (telepites)</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-12-xsmall" style="display: flex; align-items: flex-end;">
+                            <a th:if="${tabla == 'gep'}" th:href="@{/crud/gep/uj}" class="button primary">+ Új gép hozzáadása</a>
+                            <a th:if="${tabla == 'szoftver'}" th:href="@{/crud/szoftver/uj}" class="button primary">+ Új szoftver hozzáadása</a>
+                            <a th:if="${tabla == 'telepites'}" th:href="@{/crud/telepites/uj}" class="button primary">+ Új telepítés hozzáadása</a>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- GEP TÁBLA -->
+                <div class="table-wrapper" th:if="${tabla == 'gep'}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Hely</th>
+                            <th>Típus</th>
+                            <th>IP cím</th>
+                            <th>Műveletek</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="g : ${gepek}">
+                            <td th:text="${g.id}"></td>
+                            <td th:text="${g.hely}"></td>
+                            <td th:text="${g.tipus}"></td>
+                            <td th:text="${g.ipcim}"></td>
+                            <td>
+                                <a th:href="@{/crud/gep/edit/{id}(id=${g.id})}" class="button small">Edit</a>
+                                <a th:href="@{/crud/gep/delete/{id}(id=${g.id})}" class="button small"
+                                   onclick="return confirm('Biztosan törlöd ezt a gépet?')">Delete</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- SZOFTVER TÁBLA -->
+                <div class="table-wrapper" th:if="${tabla == 'szoftver'}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Név</th>
+                            <th>Kategória</th>
+                            <th>Műveletek</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="sz : ${szoftverek}">
+                            <td th:text="${sz.id}"></td>
+                            <td th:text="${sz.nev}"></td>
+                            <td th:text="${sz.kategoria}"></td>
+                            <td>
+                                <a th:href="@{/crud/szoftver/edit/{id}(id=${sz.id})}" class="button small">Edit</a>
+                                <a th:href="@{/crud/szoftver/delete/{id}(id=${sz.id})}" class="button small"
+                                   onclick="return confirm('Biztosan törlöd ezt a szoftvert?')">Delete</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TELEPITES TÁBLA -->
+                <div class="table-wrapper" th:if="${tabla == 'telepites'}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Gép</th>
+                            <th>Szoftver</th>
+                            <th>Verzió</th>
+                            <th>Dátum</th>
+                            <th>Műveletek</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="t : ${telepitesek}">
+                            <td th:text="${t.id}"></td>
+                            <td th:text="${t.gep != null ? t.gep.hely + ' (' + t.gep.ipcim + ')' : t.gepid}"></td>
+                            <td th:text="${t.szoftver != null ? t.szoftver.nev : t.szoftverid}"></td>
+                            <td th:text="${t.verzio != null ? t.verzio : '-'}"></td>
+                            <td th:text="${t.datum != null ? t.datum : '-'}"></td>
+                            <td>
+                                <a th:href="@{/crud/telepites/edit/{id}(id=${t.id})}" class="button small">Edit</a>
+                                <a th:href="@{/crud/telepites/delete/{id}(id=${t.id})}" class="button small"
+                                   onclick="return confirm('Biztosan törlöd ezt a telepítést?')">Delete</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Közös lábléc -->
     <div th:replace="~{footer :: footer}"></div>
 
 </div>
 
-<!-- Solid State JS -->
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
 <script th:src="@{/assets/js/browser.min.js}"></script>

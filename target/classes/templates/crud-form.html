@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Rekord szerkesztése – Szoftverleltár</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
+    <noscript><link rel="stylesheet" th:href="@{/assets/css/noscript.css}" /></noscript>
+</head>
+<body class="is-preload">
+<div id="page-wrapper">
+
+    <div th:replace="~{menu :: menu}"></div>
+
+    <section id="wrapper">
+        <header>
+            <div class="inner">
+                <h2 th:if="${tabla == 'gep'}" th:text="${gep.id == null ? 'Új gép hozzáadása' : 'Gép módosítása'}"></h2>
+                <h2 th:if="${tabla == 'szoftver'}" th:text="${szoftver.id == null ? 'Új szoftver hozzáadása' : 'Szoftver módosítása'}"></h2>
+                <h2 th:if="${tabla == 'telepites'}" th:text="${telepites.id == null ? 'Új telepítés hozzáadása' : 'Telepítés módosítása'}"></h2>
+            </div>
+        </header>
+
+        <div class="wrapper">
+            <div class="inner">
+
+                <!-- GEP ŰRLAP -->
+                <form th:if="${tabla == 'gep'}" th:action="@{/crud/gep/ment}" th:object="${gep}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+                    <div class="fields">
+                        <div class="field">
+                            <label>Hely (pl. T403)</label>
+                            <input type="text" th:field="*{hely}" required />
+                        </div>
+                        <div class="field">
+                            <label>Típus</label>
+                            <select th:field="*{tipus}">
+                                <option value="asztali">asztali</option>
+                                <option value="notebook">notebook</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>IP cím</label>
+                            <input type="text" th:field="*{ipcim}" required />
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Mentés" class="primary" /></li>
+                        <li><a th:href="@{/crud(tabla='gep')}" class="button">Mégse</a></li>
+                    </ul>
+                </form>
+
+                <!-- SZOFTVER ŰRLAP -->
+                <form th:if="${tabla == 'szoftver'}" th:action="@{/crud/szoftver/ment}" th:object="${szoftver}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+                    <div class="fields">
+                        <div class="field">
+                            <label>Szoftver neve</label>
+                            <input type="text" th:field="*{nev}" required />
+                        </div>
+                        <div class="field">
+                            <label>Kategória</label>
+                            <input type="text" th:field="*{kategoria}" required />
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Mentés" class="primary" /></li>
+                        <li><a th:href="@{/crud(tabla='szoftver')}" class="button">Mégse</a></li>
+                    </ul>
+                </form>
+
+                <!-- TELEPITES ŰRLAP -->
+                <form th:if="${tabla == 'telepites'}" th:action="@{/crud/telepites/ment}" th:object="${telepites}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+                    <div class="fields">
+                        <div class="field">
+                            <label>Gép</label>
+                            <select th:field="*{gepid}" required>
+                                <option th:each="g : ${gepek}" th:value="${g.id}" th:text="${g.id + ' - ' + g.hely + ' (' + g.ipcim + ')'}"></option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Szoftver</label>
+                            <select th:field="*{szoftverid}" required>
+                                <option th:each="sz : ${szoftverek}" th:value="${sz.id}" th:text="${sz.nev + ' (' + sz.kategoria + ')'}"></option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Verzió (opcionális)</label>
+                            <input type="text" th:field="*{verzio}" />
+                        </div>
+                        <div class="field">
+                            <label>Telepítés dátuma (opcionális)</label>
+                            <input type="date" th:field="*{datum}" />
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Mentés" class="primary" /></li>
+                        <li><a th:href="@{/crud(tabla='telepites')}" class="button">Mégse</a></li>
+                    </ul>
+                </form>
+
+            </div>
+        </div>
+    </section>
+
+    <div th:replace="~{footer :: footer}"></div>
+
+</div>
+
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
+<script th:src="@{/assets/js/browser.min.js}"></script>
+<script th:src="@{/assets/js/breakpoints.min.js}"></script>
+<script th:src="@{/assets/js/util.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
+</body>
+</html>

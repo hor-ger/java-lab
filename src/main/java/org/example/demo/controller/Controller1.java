@@ -40,11 +40,6 @@ public class Controller1 {
         return "diagram";
     }
 
-    @GetMapping("/crud")
-    public String crud() {
-        return "crud";
-    }
-
     @GetMapping("/rest")
     public String rest() {
         return "rest";
