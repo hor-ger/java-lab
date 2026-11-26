@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <div th:replace="~{menu :: menu}"></div>
+    <hr>
+    <h1>Home page</h1>
+    <div sec:authorize="isAuthenticated()">
+        <p>Logged in user:<strong sec:authentication="name"></strong></p>
+    </div>
+
+    <h2>Gépek listája (teszt)</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Hely</th>
+            <th>Típus</th>
+            <th>IP cím</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="gep : ${gepek}">
+            <td th:text="${gep.id}"></td>
+            <td th:text="${gep.hely}"></td>
+            <td th:text="${gep.tipus}"></td>
+            <td th:text="${gep.ipcim}"></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
