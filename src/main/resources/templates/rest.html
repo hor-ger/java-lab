@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Oldal címe – Szoftverleltár</title>
+    <title>REST API – Szoftverleltár</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" th:href="@{/assets/css/main.css}" />
@@ -10,32 +10,87 @@
 <body class="is-preload">
 <div id="page-wrapper">
 
-    <!-- Közös fejléc és menü -->
     <div th:replace="~{menu :: menu}"></div>
 
-    <!-- Oldal fő tartalma -->
     <section id="wrapper">
         <header>
             <div class="inner">
-                <h2>Oldal címe</h2>
-                <p>Rövid leírás az oldalról.</p>
+                <h2>REST API</h2>
+                <p>RESTful végpontok a gépek és szoftverek kezeléséhez. Tesztelhető cURL-lel és Postman-nel.</p>
             </div>
         </header>
 
         <div class="wrapper">
             <div class="inner">
-                <!-- IDE JÖN AZ OLDAL TARTALMA -->
-                <p>Tartalom feltöltés alatt...</p>
+
+                <h3 class="major">Alap URL</h3>
+                <p><code>http://localhost:8080/api</code></p>
+
+                <h3 class="major">Gépek – <code>/api/gepek</code></h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Metódus</th>
+                            <th>URL</th>
+                            <th>Leírás</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>GET</td><td>/api/gepek</td><td>Összes gép listázása</td></tr>
+                        <tr><td>GET</td><td>/api/gepek/{id}</td><td>Egy gép lekérése</td></tr>
+                        <tr><td>POST</td><td>/api/gepek</td><td>Új gép létrehozása (JSON body)</td></tr>
+                        <tr><td>PUT</td><td>/api/gepek/{id}</td><td>Gép módosítása (JSON body)</td></tr>
+                        <tr><td>DELETE</td><td>/api/gepek/{id}</td><td>Gép törlése</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="major">Szoftverek – <code>/api/szoftverek</code></h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Metódus</th>
+                            <th>URL</th>
+                            <th>Leírás</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>GET</td><td>/api/szoftverek</td><td>Összes szoftver listázása</td></tr>
+                        <tr><td>GET</td><td>/api/szoftverek/{id}</td><td>Egy szoftver lekérése</td></tr>
+                        <tr><td>POST</td><td>/api/szoftverek</td><td>Új szoftver létrehozása (JSON body)</td></tr>
+                        <tr><td>PUT</td><td>/api/szoftverek/{id}</td><td>Szoftver módosítása (JSON body)</td></tr>
+                        <tr><td>DELETE</td><td>/api/szoftverek/{id}</td><td>Szoftver törlése</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="major">JSON példa – új gép (POST)</h3>
+                <pre><code>{
+  "hely": "T101",
+  "tipus": "notebook",
+  "ipcim": "192.168.10.50"
+}</code></pre>
+
+                <h3 class="major">JSON példa – új szoftver (POST)</h3>
+                <pre><code>{
+  "nev": "Visual Studio Code",
+  "kategoria": "fejlesztői eszköz"
+}</code></pre>
+
+                <h3 class="major">cURL példák</h3>
+                <h3 class="major">Postman</h3>
+                <p>Postmanben állítsd be a metódust (GET/POST/PUT/DELETE), az URL-t (pl. <code>http://localhost:8080/api/gepek</code>), POST/PUT esetén a Body → raw → JSON mezőt. A válasz JSON formátumban érkezik.</p>
+
             </div>
         </div>
     </section>
 
-    <!-- Közös lábléc -->
     <div th:replace="~{footer :: footer}"></div>
 
 </div>
 
-<!-- Solid State JS -->
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/js/jquery.scrollex.min.js}"></script>
 <script th:src="@{/assets/js/browser.min.js}"></script>
