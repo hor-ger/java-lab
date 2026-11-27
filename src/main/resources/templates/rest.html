@@ -80,6 +80,25 @@
 }</code></pre>
 
                 <h3 class="major">cURL példák</h3>
+                <pre><code># Összes gép
+curl http://localhost:8080/api/gepek
+
+# Egy gép
+curl http://localhost:8080/api/gepek/1
+
+# Új gép
+curl -X POST http://localhost:8080/api/gepek -H "Content-Type: application/json" -d "{\"hely\":\"T101\",\"tipus\":\"notebook\",\"ipcim\":\"192.168.10.50\"}"
+
+# Gép módosítása
+curl -X PUT http://localhost:8080/api/gepek/1 -H "Content-Type: application/json" -d "{\"hely\":\"T102\",\"tipus\":\"asztali\",\"ipcim\":\"192.168.10.51\"}"
+
+# Gép törlése
+curl -X DELETE http://localhost:8080/api/gepek/1
+
+# Szoftverek
+curl http://localhost:8080/api/szoftverek
+curl -X POST http://localhost:8080/api/szoftverek -H "Content-Type: application/json" -d "{\"nev\":\"VS Code\",\"kategoria\":\"fejlesztői eszköz\"}"
+</code></pre>
                 <h3 class="major">Postman</h3>
                 <p>Postmanben állítsd be a metódust (GET/POST/PUT/DELETE), az URL-t (pl. <code>http://localhost:8080/api/gepek</code>), POST/PUT esetén a Body → raw → JSON mezőt. A válasz JSON formátumban érkezik.</p>
 
